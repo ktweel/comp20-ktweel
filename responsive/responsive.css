@@ -1,0 +1,84 @@
+  	.homer {
+		width:312px; 
+		height:312px; 
+		background:url(homer.jpg) 0 0px;
+	}
+
+	.homer {
+		width:312px; 
+		height:312px; 
+		background:url(homer.jpg) 312 0px;
+	}
+
+		.homer {
+		width:312px; 
+		height:312px; 
+		background:url(homer.jpg) 0 312px;
+	}
+
+		.homer {
+		width:312px; 
+		height:312px; 
+		background:url(homer.jpg) 312 312px;
+	}
+
+@media screen 
+  and (min-width: 1201px) { 
+
+  	.homer {
+		width:312px; 
+		height:312px; 
+		background:url(homer.jpg) 0 0px;
+	}
+
+	body {
+		background-color: red;
+	}
+}
+
+
+@media screen 
+  and (min-width: 801px) 
+  and (max-width: 1200px) { 
+
+  	.homer {
+		width:312px; 
+		height:312px; 
+		background:url(homer.jpg) 312 0px;
+	}
+
+	body {
+		background-color: yellow;
+	}
+}
+
+@media screen 
+  and (min-width: 401px) 
+  and (max-width: 800px) { 
+
+  	.homer {
+		width:312px; 
+		height:312px; 
+		background:url(homer.jpg) 0 312px;
+	}
+
+	body {
+		background-color: blue;
+	}
+}
+
+
+@media screen 
+
+  and (max-width: 400px) { 
+
+  	.homer {
+		width:312px; 
+		height:312px; 
+		background:url(homer.jpg) 312 312px;
+	}
+
+	body {
+		background-color: green;
+	}
+}
