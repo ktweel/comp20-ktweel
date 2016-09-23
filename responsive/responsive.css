@@ -1,26 +1,4 @@
-  	.homer {
-		width:312px; 
-		height:312px; 
-		background:url(homer.jpg) 0 0px;
-	}
 
-	.homer {
-		width:312px; 
-		height:312px; 
-		background:url(homer.jpg) 312 0px;
-	}
-
-		.homer {
-		width:312px; 
-		height:312px; 
-		background:url(homer.jpg) 0 312px;
-	}
-
-		.homer {
-		width:312px; 
-		height:312px; 
-		background:url(homer.jpg) 312 312px;
-	}
 
 @media screen 
   and (min-width: 1201px) { 
@@ -31,9 +9,6 @@
 		background:url(homer.jpg) 0 0px;
 	}
 
-	body {
-		background-color: red;
-	}
 }
 
 
@@ -44,11 +19,7 @@
   	.homer {
 		width:312px; 
 		height:312px; 
-		background:url(homer.jpg) 312 0px;
-	}
-
-	body {
-		background-color: yellow;
+		background:url(homer.jpg) 312px 0px;
 	}
 }
 
@@ -59,11 +30,7 @@
   	.homer {
 		width:312px; 
 		height:312px; 
-		background:url(homer.jpg) 0 312px;
-	}
-
-	body {
-		background-color: blue;
+		background:url(homer.jpg) 0px -312px;
 	}
 }
 
@@ -75,10 +42,6 @@
   	.homer {
 		width:312px; 
 		height:312px; 
-		background:url(homer.jpg) 312 312px;
-	}
-
-	body {
-		background-color: green;
+		background:url(homer.jpg) 312px -312px;
 	}
 }
