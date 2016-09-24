@@ -1,7 +1,7 @@
 
 
 @media screen 
-  and (min-width: 1201px) { 
+  and (min-width: 1200px) { 
 
   	.homer {
 		width:312px; 
@@ -13,7 +13,7 @@
 
 
 @media screen 
-  and (min-width: 801px) 
+  and (min-width: 800px) 
   and (max-width: 1200px) { 
 
   	.homer {
@@ -24,7 +24,7 @@
 }
 
 @media screen 
-  and (min-width: 401px) 
+  and (min-width: 400px) 
   and (max-width: 800px) { 
 
   	.homer {
