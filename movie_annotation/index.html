@@ -1,4 +1,4 @@
-CTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8" />
@@ -15,6 +15,22 @@ CTYPE html>
 
 <script>
     // Complete this section and create a CSS file named style.css
+    var vid = document.getElementById("classic_video");
+    var caption = document.getElementById("movie_quotes");
+    vid.addEventListener("timeupdate", function(){
+    	if(vid.currentTime < 24) {
+    		caption.innerHTML = "...";
+    	}
+    	else if (vid.currentTime < 31) {
+    		caption.innerHTML = "Igor: DR. FRANKENSTEIN?!?!?";
+    	}
+    	else {
+    		caption.innerHTML = "Dr. Frederick Frankenstein: Frokensteen.";
+    	}
+
+
+
+    })
 </script>
 </body>
 </html> 
