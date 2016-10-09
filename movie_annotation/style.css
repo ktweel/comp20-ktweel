@@ -1,0 +1,17 @@
+#classic_video {
+	margin-left: auto;
+	margin-right: auto;
+	width: 700px;
+	display: block;
+
+}
+
+h1{
+	text-align: center;
+
+}
+
+#movie_quotes {
+	text-align: center;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
