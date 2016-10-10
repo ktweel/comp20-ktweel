@@ -2,7 +2,7 @@ var map;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 42.352271, lng: -71.05524200000001},
-      zoom: 10
+      zoom: 12
     });
     var image = 'icon.png';
     var marker = new google.maps.Marker({
@@ -158,7 +158,7 @@ function initMap() {
           {lat: 42.233391, lng: -71.007153},
           {lat: 42.2078543, lng: -71.0011385}
     ];
-	var branch1 = [
+	var branch2 = [
           {lat: 42.320685, lng: -71.052391},
           {lat: 42.31129, lng: -71.053331},
           {lat: 42.300093, lng: -71.061667},
