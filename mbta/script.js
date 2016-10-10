@@ -1,9 +1,35 @@
 var map;
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
+	
 function initMap() {
+
     map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 42.352271, lng: -71.05524200000001},
+      center: {lat: 42.320685, lng: -71.052391},
       zoom: 12
     });
+    var infoWindow = new google.maps.InfoWindow({map: map});
+    if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+    }
     var image = 'icon.png';
     var marker = new google.maps.Marker({
 		position: {lat: 42.352271, lng: -71.05524200000001},

@@ -3,15 +3,22 @@
 	margin-right: auto;
 	width: 700px;
 	display: block;
+	padding: 50px;
+	background-color: brown;
 
 }
 
 h1{
 	text-align: center;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 
 }
 
 #movie_quotes {
 	text-align: center;
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+body {
+	background-color: #FDF5E6;
 }
