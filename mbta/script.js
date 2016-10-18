@@ -64,8 +64,8 @@ function findPos(){
 			//var wind = infowindows[i];
 				wind.open(map, myMarker);
 			});
-            console.log('1');
-            console.log(mycords);
+            // console.log('1');
+            // console.log(mycords);
           }, function() {
             // handleLocationError(true, infoWindow, map.getCenter());
           });
@@ -73,8 +73,6 @@ function findPos(){
           // Browser doesn't support Geolocation
           handleLocationError(false, infoWindow, map.getCenter());
     }
-
-    
 }
 	
 function initMap() {
@@ -131,8 +129,6 @@ function initMap() {
     });
     path1.setMap(map);
     path2.setMap(map);
-
-
 }
 
 
@@ -146,10 +142,14 @@ function makeMarkers(){
 			icon: image,
 			infoIndex: i
 		});
-		makeInfoWindows(i);
+		infowindows[i] = new google.maps.InfoWindow({
+			content: "This is " + stations[i][0]
+		});
 		markerArray[i].addListener('click', function(){
 			//var wind = infowindows[i];
-			infowindows[this.infoIndex].open(map, markerArray[this.infoIndex]);
+			console.log(this.infoIndex);
+			updateWindow(this.infoIndex);
+			//infowindows[this.infoIndex].open(map, markerArray[this.infoIndex]);
 		});
 	}
 }
@@ -179,7 +179,7 @@ function findClosestStation(mycords){
     });
 
     path.setMap(map);
-	console.log(stations[minIndex][0]);
+	// console.log(stations[minIndex][0]);
 }
 
 
@@ -211,12 +211,45 @@ function haversineDistance(coords1, coords2) {
   return d;
 }
 
-function makeInfoWindows(i){
-	infowindows[i] = new google.maps.InfoWindow({
-			content: "This is " + stations[i][0]
-		});
+function updateWindow(index){
+	console.log("trying to update");
+	console.log(index);
+	request = new XMLHttpRequest();
+	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json");
+	request.onreadystatechange = getRequest;
+	request.send();
+	// console.log(newHTML);
+	// infowindows[i].setContent('');
 }
     
+function getRequest() {
+	/*console.log("ready state" + request.readyState);
+	console.log("The data is =>" + request.responseText);
+	console.log(request.responseText);*/
+	// console.log(station);
+	console.log("here");
+	if (request.readyState == 4 && request.status == 200) {
+		console.log("in readyState");
+		// console.log(request.responseText);
+		theData = request.responseText;
+		trains = JSON.parse(theData);
+		newHTML = "";
+
+		console.log(trains);
+
+		console.log(trains["TripList"]["Trips"][0]["Destination"]);
+
+		newHTML = "train to " + trains["TripList"]["Trips"][0]["Destination"] + 
+			      " at station " + trains["TripList"]["Trips"][0]["Predictions"][0]["Stop"] + 
+			      " in " + trains["TripList"]["Trips"][0]["Predictions"][0]["Seconds"];
+		console.log(newHTML);
+		console.log(station);
+		// infowindows[i].setContent(newHTML);
+		// infowindows[i].open(map, markerArray[i]);
+		
+
+	}
+}
     /*
     var marker = new google.maps.Marker({
 		position: south,
