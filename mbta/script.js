@@ -1,5 +1,6 @@
 var map;
 var mycords;
+prevStation = null;
 
 /* Red Line station coordinates */
 
@@ -9,13 +10,13 @@ var stations = [
 	["Andrew", {lat: 42.330154, lng: -71.057655}],
 	["Porter Square", {lat: 42.3884, lng: -71.11914899999999}],
 	["Harvard Square", {lat: 42.373362, lng: -71.118956}],
-	["JFK/UMAS", {lat: 42.320685, lng: -71.052391}],
+	["JFK/UMass", {lat: 42.320685, lng: -71.052391}],
 	["Savin Hill", {lat: 42.31129, lng: -71.053331}],
 	["Park Street", {lat: 42.35639457, lng: -71.0624242}],
 	["Broadway", {lat: 42.342622, lng: -71.056967}],
 	["North Quincy", {lat: 42.275275, lng: -71.029583}],
 	["Shawmut", {lat: 42.29312583, lng: -71.06573796000001}],
-	["Davis Square", {lat: 42.39674, lng: -71.121815}],
+	["Davis", {lat: 42.39674, lng: -71.121815}],
 	["Alewife", {lat: 42.395428, lng: -71.142483}],
 	["Kendall/MIT", {lat: 42.36249079, lng: -71.08617653}],
 	["Charles/MGH", {lat: 42.361166, lng: -71.070628}],
@@ -214,6 +215,7 @@ function haversineDistance(coords1, coords2) {
 function updateWindow(index){
 	console.log("trying to update");
 	console.log(index);
+	station = index;
 	request = new XMLHttpRequest();
 	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json");
 	request.onreadystatechange = getRequest;
@@ -226,7 +228,7 @@ function getRequest() {
 	/*console.log("ready state" + request.readyState);
 	console.log("The data is =>" + request.responseText);
 	console.log(request.responseText);*/
-	// console.log(station);
+	console.log(station);
 	console.log("here");
 	if (request.readyState == 4 && request.status == 200) {
 		console.log("in readyState");
@@ -237,15 +239,40 @@ function getRequest() {
 
 		console.log(trains);
 
-		console.log(trains["TripList"]["Trips"][0]["Destination"]);
+		trips = trains["TripList"]["Trips"];
+		// console.log(trips);
 
-		newHTML = "train to " + trains["TripList"]["Trips"][0]["Destination"] + 
-			      " at station " + trains["TripList"]["Trips"][0]["Predictions"][0]["Stop"] + 
-			      " in " + trains["TripList"]["Trips"][0]["Predictions"][0]["Seconds"];
-		console.log(newHTML);
-		console.log(station);
-		// infowindows[i].setContent(newHTML);
-		// infowindows[i].open(map, markerArray[i]);
+		for(i=0; i< trips.length; i++){
+			// console.log("new train");
+			stops = trips[i]["Predictions"];
+			// console.log(stops);
+			for(j=0; j<stops.length; j++) {
+				if(stops[j]["Stop"] == stations[station][0]){
+					console.log(stops[j]["Stop"] + " in " + stops[j]["Seconds"]);
+
+					newHTML += "<p> " + stops[j]["Stop"] + " in " + stops[j]["Seconds"]
+							  + "</p>";
+				}
+			}
+		}
+
+		// console.log(trains["TripList"]["Trips"][0]["Destination"]);
+
+		// newHTML = "train to " + trains["TripList"]["Trips"][0]["Destination"] + 
+		//	      " at station " + trains["TripList"]["Trips"][0]["Predictions"][0]["Stop"] + 
+		//	      " in " + trains["TripList"]["Trips"][0]["Predictions"][0]["Seconds"];
+		// console.log(newHTML);
+		// console.log(station);
+		if(prevStation != null){
+			console.log(prevStation);
+			infowindows[prevStation].close();
+			
+		}
+		prevStation = station;
+		//infowindows[prevStation].close();
+		infowindows[station].setContent(newHTML);
+		infowindows[station].open(map, markerArray[station]);
+		map.setCenter(stations[station][1]);
 		
 
 	}
