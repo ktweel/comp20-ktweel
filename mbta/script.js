@@ -32,12 +32,6 @@ var stations = [
 var markerArray = new Array(stations.length);
 var infowindows = new Array(stations.length);
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-      }
 
 function findPos(){
     if (navigator.geolocation) {
@@ -54,12 +48,15 @@ function findPos(){
 				map: map,
 				title: 'My Position',
 			});
-			var wind = new google.maps.InfoWindow({
-				content: "The closest station is " + stations[minIndex][0] +
-						". It is " + minDistance + " miles away."
+			wind = new google.maps.InfoWindow({
+				content: '<p class="loc">The closest station is ' + stations[minIndex][0] +
+						'.</p><p class="loc"> It is ' + minDistance + " miles away.</p>"
 			});
 			myMarker.addListener('click', function(){
 				wind.open(map, myMarker);
+				if(prevStation != null){
+					infowindows[prevStation].close();
+				}
 			});
           }, function() {
             alert("Location Error");
@@ -74,38 +71,27 @@ function initMap() {
 
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 42.320685, lng: -71.052391},
-      zoom: 12
+      zoom: 13
     });
     findPos();
     
     makeMarkers();
 
 	var branch1 = [
-          {lat: 42.395428, lng: -71.142483},
-          {lat: 42.39674, lng: -71.121815},
-          {lat: 42.3884, lng: -71.11914899999999},
-          {lat: 42.373362, lng: -71.118956},
-          {lat: 42.365486, lng: -71.103802},
-          {lat: 42.36249079, lng: -71.08617653},
-          {lat: 42.361166, lng: -71.070628},
-          {lat: 42.35639457, lng: -71.0624242},
-          {lat: 42.355518, lng: -71.060225},
-          {lat: 42.352271, lng: -71.05524200000001},
-          {lat: 42.342622, lng: -71.056967},
-          {lat: 42.330154, lng: -71.057655},
-          {lat: 42.320685, lng: -71.052391},
-          {lat: 42.275275, lng: -71.029583},
-          {lat: 42.2665139, lng: -71.0203369},
-          {lat: 42.251809, lng: -71.005409},
-          {lat: 42.233391, lng: -71.007153},
-          {lat: 42.2078543, lng: -71.0011385}
+		stations[11][1], stations[10][1],
+		stations[2][1], stations[3][1],
+		stations[20][1], stations[12][1],
+		stations[13][1], stations[6][1],
+		stations[14][1], stations[0][1],
+		stations[7][1], stations[1][1],
+		stations[4][1], stations[8][1],
+		stations[18][1], stations[15][1],
+		stations[16][1], stations[21][1]
     ];
 	var branch2 = [
-          {lat: 42.320685, lng: -71.052391},
-          {lat: 42.31129, lng: -71.053331},
-          {lat: 42.300093, lng: -71.061667},
-          {lat: 42.29312583, lng: -71.06573796000001},
-          {lat: 42.284652, lng: -71.06448899999999}
+		stations[4][1], stations[5][1],
+		stations[19][1], stations[9][1],
+		stations[17][1]
     ];
 
     var path1 = new google.maps.Polyline({
@@ -216,14 +202,12 @@ function getRequest() {
 	if (request.readyState == 4 && request.status == 200) {
 		theData = request.responseText;
 		trains = JSON.parse(theData);
-		// newHTML = "<div id='info'>";
+
 		braintree = [];
 		ashmont = [];
 		alewife = [];
-		console.log(trains);
 
 		trips = trains["TripList"]["Trips"];
-		// console.log(trips);
 
 		for(i=0; i< trips.length; i++){
 			stops = trips[i]["Predictions"];
@@ -239,92 +223,57 @@ function getRequest() {
 					if(trips[i]["Destination"] == "Ashmont"){
 						ashmont.push(stops[j]);
 					}
-
-					// newHTML += "<p> Train to " + trips[i]["Destination"] + " in " + stops[j]["Seconds"]
-					// 		  + " seconds </p>";
 				}
 			}
 		}
-		// newHTML += "</div>";
-
 		buildHTML(alewife, braintree, ashmont);
-
-/*		if(prevStation != null){
-			infowindows[prevStation].close();	
-		}
-		prevStation = station;
-		infowindows[station].setContent(newHTML);
-		infowindows[station].open(map, markerArray[station]);
-		map.setCenter(stations[station][1]);*/
-		
-
 	}
 }
 
 function buildHTML(alewife, braintree, ashmont){
-	newHTML = "<div id='info'>";
+	newHTML = '<div id="info"><p> Upcoming trains at ' + stations[station][0];
 
-	sortLists();
+	sortLists(alewife);
+	sortLists(braintree);
+	sortLists(ashmont);
 
+	newHTML += '<div id= "destination"><p>Alewife</p></div>';
 	for (i = 0; i < alewife.length; i++) {
-		newHTML += "<p> Train to Alewife in " + alewife[i]["Seconds"]
+		newHTML += "<p> Train in " + alewife[i]["Seconds"]
 					 		  + " seconds </p>";
 	}
+	newHTML += '<div id= "destination"><p>Braintree</p></div>';
 	for (i = 0; i < braintree.length; i++) {
-		newHTML += "<p> Train to Braintree in " + braintree[i]["Seconds"]
+		newHTML += "<p> Train in " + braintree[i]["Seconds"]
 					 		  + " seconds </p>";
 	}
+	newHTML += '<div id= "destination"><p>Ashmont</p></div>';
 	for (i = 0; i < ashmont.length; i++) {
-		newHTML += "<p> Train to Ashmont in " + ashmont[i]["Seconds"]
+		newHTML += "<p> Train in " + ashmont[i]["Seconds"]
 					 		  + " seconds </p>";
 	}
 
 
 	if(prevStation != null){
-			infowindows[prevStation].close();	
+			infowindows[prevStation].close();
+				
 		}
+		wind.close();
 		prevStation = station;
 		infowindows[station].setContent(newHTML);
 		infowindows[station].open(map, markerArray[station]);
-		map.setCenter(stations[station][1]);
+		// map.setCenter(stations[station][1]);
 
 }
 
-function sortLists() {
-		console.log("in sort list");
-    	for (var i = 0; i < alewife.length; i++) {
-        	var tmp = alewife[i]; //Copy of the current element. 
-        	/*Check through the sorted part and compare with the number in tmp. If large, shift the number*/
-        	for (var j = i - 1; j >= 0 && (alewife[j]["Seconds"] > tmp["Seconds"]); j--) {
-           		//Shift the number
-            	alewife[j + 1] = alewife[j];
+
+function sortLists(dest) {
+    	for (var i = 0; i < dest.length; i++) {
+        	var tmp = dest[i]; 
+        	for (var j = i - 1; j >= 0 && (dest[j]["Seconds"] > tmp["Seconds"]); j--) {
+            	dest[j + 1] = dest[j];
         	}
-        	//Insert the copied number at the correct position
-        	//in sorted part. 
-        	alewife[j + 1] = tmp;
-    	}
-    	console.log(alewife);
-    	for (var i = 0; i < braintree.length; i++) {
-        	var tmp = braintree[i]; //Copy of the current element. 
-        	/*Check through the sorted part and compare with the number in tmp. If large, shift the number*/
-        	for (var j = i - 1; j >= 0 && (braintree[j]["Seconds"] > tmp["Seconds"]); j--) {
-           		//Shift the number
-            	braintree[j + 1] = braintree[j];
-        	}
-        	//Insert the copied number at the correct position
-        	//in sorted part. 
-        	braintree[j + 1] = tmp;
-    	}
-    	for (var i = 0; i < ashmont.length; i++) {
-        	var tmp = ashmont[i]; //Copy of the current element. 
-        	/*Check through the sorted part and compare with the number in tmp. If large, shift the number*/
-        	for (var j = i - 1; j >= 0 && (ashmont[j]["Seconds"] > tmp["Seconds"]); j--) {
-           		//Shift the number
-            	ashmont[j + 1] = ashmont[j];
-        	}
-        	//Insert the copied number at the correct position
-        	//in sorted part. 
-        	ashmont[j + 1] = tmp;
+        	dest[j + 1] = tmp;
     	}
 }
 

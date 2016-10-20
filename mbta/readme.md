@@ -15,8 +15,10 @@ The following items have been implemented
   the closest Red Line station and its distance away in miles
 - a green polyline connects the current location and the nearest subway
   station
-- (insert line about JSON API once implemented)
+- The JSON API has been implemented to provide the upcoming subway times for
+  each station when its marker is clicked, and this data is sorted by destinatin
+  and time til arrival. 
 
 I used the Havershine function from stackoverflow referenced in the assignment
 
-I spent approximately 10ish hours on this assignment
+I spent approximately 15 hours on this assignment

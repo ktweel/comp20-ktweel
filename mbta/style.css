@@ -7,3 +7,11 @@ html, body {
 	margin: 0;
 	height: 100%;
 }
+
+#destination {
+	font-weight: bold;
+}
+
+.loc {
+	text-align: center;
+}
