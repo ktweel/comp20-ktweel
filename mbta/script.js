@@ -40,7 +40,6 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       }
 
 function findPos(){
-	// var infoWindow = new google.maps.InfoWindow({map: map});
     if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
             mycords = {
@@ -48,8 +47,6 @@ function findPos(){
               lng: position.coords.longitude
             };
 
-            // infoWindow.setPosition(mycords);
-            // infoWindow.setContent('Location found.');
             map.setCenter(mycords);
             findClosestStation(mycords);
             var myMarker = new google.maps.Marker({
@@ -62,17 +59,14 @@ function findPos(){
 						". It is " + minDistance + " miles away."
 			});
 			myMarker.addListener('click', function(){
-			//var wind = infowindows[i];
 				wind.open(map, myMarker);
 			});
-            // console.log('1');
-            // console.log(mycords);
           }, function() {
-            // handleLocationError(true, infoWindow, map.getCenter());
+            alert("Location Error");
           });
     } else {
           // Browser doesn't support Geolocation
-          handleLocationError(false, infoWindow, map.getCenter());
+          alert("Location Error - browser doesn't support geolocation");
     }
 }
 	
@@ -147,10 +141,8 @@ function makeMarkers(){
 			content: "This is " + stations[i][0]
 		});
 		markerArray[i].addListener('click', function(){
-			//var wind = infowindows[i];
-			console.log(this.infoIndex);
+			// console.log(this.infoIndex);
 			updateWindow(this.infoIndex);
-			//infowindows[this.infoIndex].open(map, markerArray[this.infoIndex]);
 		});
 	}
 }
@@ -180,7 +172,7 @@ function findClosestStation(mycords){
     });
 
     path.setMap(map);
-	// console.log(stations[minIndex][0]);
+
 }
 
 
@@ -213,207 +205,128 @@ function haversineDistance(coords1, coords2) {
 }
 
 function updateWindow(index){
-	console.log("trying to update");
-	console.log(index);
 	station = index;
 	request = new XMLHttpRequest();
 	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json");
 	request.onreadystatechange = getRequest;
 	request.send();
-	// console.log(newHTML);
-	// infowindows[i].setContent('');
 }
     
 function getRequest() {
-	/*console.log("ready state" + request.readyState);
-	console.log("The data is =>" + request.responseText);
-	console.log(request.responseText);*/
-	console.log(station);
-	console.log("here");
 	if (request.readyState == 4 && request.status == 200) {
-		console.log("in readyState");
-		// console.log(request.responseText);
 		theData = request.responseText;
 		trains = JSON.parse(theData);
-		newHTML = "";
-
+		// newHTML = "<div id='info'>";
+		braintree = [];
+		ashmont = [];
+		alewife = [];
 		console.log(trains);
 
 		trips = trains["TripList"]["Trips"];
 		// console.log(trips);
 
 		for(i=0; i< trips.length; i++){
-			// console.log("new train");
 			stops = trips[i]["Predictions"];
-			// console.log(stops);
 			for(j=0; j<stops.length; j++) {
 				if(stops[j]["Stop"] == stations[station][0]){
-					console.log(stops[j]["Stop"] + " in " + stops[j]["Seconds"]);
 
-					newHTML += "<p> " + stops[j]["Stop"] + " in " + stops[j]["Seconds"]
-							  + "</p>";
+					if(trips[i]["Destination"] == "Alewife"){
+						alewife.push(stops[j]);
+					}
+					if(trips[i]["Destination"] == "Braintree"){
+						braintree.push(stops[j]);
+					}
+					if(trips[i]["Destination"] == "Ashmont"){
+						ashmont.push(stops[j]);
+					}
+
+					// newHTML += "<p> Train to " + trips[i]["Destination"] + " in " + stops[j]["Seconds"]
+					// 		  + " seconds </p>";
 				}
 			}
 		}
+		// newHTML += "</div>";
 
-		// console.log(trains["TripList"]["Trips"][0]["Destination"]);
+		buildHTML(alewife, braintree, ashmont);
 
-		// newHTML = "train to " + trains["TripList"]["Trips"][0]["Destination"] + 
-		//	      " at station " + trains["TripList"]["Trips"][0]["Predictions"][0]["Stop"] + 
-		//	      " in " + trains["TripList"]["Trips"][0]["Predictions"][0]["Seconds"];
-		// console.log(newHTML);
-		// console.log(station);
-		if(prevStation != null){
-			console.log(prevStation);
-			infowindows[prevStation].close();
-			
+/*		if(prevStation != null){
+			infowindows[prevStation].close();	
 		}
 		prevStation = station;
-		//infowindows[prevStation].close();
 		infowindows[station].setContent(newHTML);
 		infowindows[station].open(map, markerArray[station]);
-		map.setCenter(stations[station][1]);
+		map.setCenter(stations[station][1]);*/
 		
 
 	}
 }
-    /*
-    var marker = new google.maps.Marker({
-		position: south,
-		map: map,
-		title: 'South Station',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: andrew,
-		map: map,
-		title: 'Andrew',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: porter,
-		map: map,
-		title: 'Porter Square',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: harvard,
-		map: map,
-		title: 'Harvard Square',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: jfk,
-		map: map,
-		title: 'JFK/UMASS',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: savin,
-		map: map,
-		title: 'Savin Hill',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: park,
-		map: map,
-		title: 'Park Street',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: broadway,
-		map: map,
-		title: 'Broadway',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: nquincy,
-		map: map,
-		title: 'North Quincy',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: shawmut,
-		map: map,
-		title: 'Shawmut',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: davis,
-		map: map,
-		title: 'Davis',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: alewife,
-		map: map,
-		title: 'Alewife',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: kendall,
-		map: map,
-		title: 'Kendall/MIT',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: charles,
-		map: map,
-		title: 'Charles/MGH',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: dtwncrossing,
-		map: map,
-		title: 'Downton Crossing',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: qcenter,
-		map: map,
-		title: 'Quincy Center',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: qadams,
-		map: map,
-		title: 'Quincy Adams',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: ashmont,
-		map: map,
-		title: 'Ashmont',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: wollaston,
-		map: map,
-		title: 'Wollaston',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: fieldscorner,
-		map: map,
-		title: 'Fields Corner',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: central,
-		map: map,
-		title: 'Central Square',
-		icon: image
-	});
-	var marker = new google.maps.Marker({
-		position: braintree,
-		map: map,
-		title: 'Braintree',
-		icon: image
-	});
-	
-	*/
+
+function buildHTML(alewife, braintree, ashmont){
+	newHTML = "<div id='info'>";
+
+	sortLists();
+
+	for (i = 0; i < alewife.length; i++) {
+		newHTML += "<p> Train to Alewife in " + alewife[i]["Seconds"]
+					 		  + " seconds </p>";
+	}
+	for (i = 0; i < braintree.length; i++) {
+		newHTML += "<p> Train to Braintree in " + braintree[i]["Seconds"]
+					 		  + " seconds </p>";
+	}
+	for (i = 0; i < ashmont.length; i++) {
+		newHTML += "<p> Train to Ashmont in " + ashmont[i]["Seconds"]
+					 		  + " seconds </p>";
+	}
 
 
+	if(prevStation != null){
+			infowindows[prevStation].close();	
+		}
+		prevStation = station;
+		infowindows[station].setContent(newHTML);
+		infowindows[station].open(map, markerArray[station]);
+		map.setCenter(stations[station][1]);
+
+}
+
+function sortLists() {
+		console.log("in sort list");
+    	for (var i = 0; i < alewife.length; i++) {
+        	var tmp = alewife[i]; //Copy of the current element. 
+        	/*Check through the sorted part and compare with the number in tmp. If large, shift the number*/
+        	for (var j = i - 1; j >= 0 && (alewife[j]["Seconds"] > tmp["Seconds"]); j--) {
+           		//Shift the number
+            	alewife[j + 1] = alewife[j];
+        	}
+        	//Insert the copied number at the correct position
+        	//in sorted part. 
+        	alewife[j + 1] = tmp;
+    	}
+    	console.log(alewife);
+    	for (var i = 0; i < braintree.length; i++) {
+        	var tmp = braintree[i]; //Copy of the current element. 
+        	/*Check through the sorted part and compare with the number in tmp. If large, shift the number*/
+        	for (var j = i - 1; j >= 0 && (braintree[j]["Seconds"] > tmp["Seconds"]); j--) {
+           		//Shift the number
+            	braintree[j + 1] = braintree[j];
+        	}
+        	//Insert the copied number at the correct position
+        	//in sorted part. 
+        	braintree[j + 1] = tmp;
+    	}
+    	for (var i = 0; i < ashmont.length; i++) {
+        	var tmp = ashmont[i]; //Copy of the current element. 
+        	/*Check through the sorted part and compare with the number in tmp. If large, shift the number*/
+        	for (var j = i - 1; j >= 0 && (ashmont[j]["Seconds"] > tmp["Seconds"]); j--) {
+           		//Shift the number
+            	ashmont[j + 1] = ashmont[j];
+        	}
+        	//Insert the copied number at the correct position
+        	//in sorted part. 
+        	ashmont[j + 1] = tmp;
+    	}
+}
 
 
 
