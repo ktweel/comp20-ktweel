@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Captain's Log</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script>
+	  // Your work will be done here...
+	  function reload() {
+	  	output = "";
+	  	for (key in localStorage){
+	  		output = output +"<p>" + localStorage[key] + "</p>";
+	  	}
+	  	$('#log').html(output);
+	  }
+
+	  function store() {
+	  	console.log("here");
+	  	txt = $('#msg').val();
+	  	localStorage[new Date().getTime()] = txt;
+	  	$('#msg').val('');
+	  	reload();
+	  }
+	</script>
+</head>
+
+<body>
+	<h1>Captain's Log</h1>
+	<h3>New entry: <input type="text" id="msg" name="msg" size="30" onchange="store()" /></h3>
+	<div id="log"></div>
+</body>
+</html>
