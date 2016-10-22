@@ -10,7 +10,8 @@
 	  function reload() {
 	  	output = "";
 	  	for (key in localStorage){
-	  		output = output +"<p>" + localStorage[key] + "</p>";
+	  		console.log(key);
+	  		output += "<p>" + localStorage[key] + "</p>";
 	  	}
 	  	$('#log').html(output);
 	  }
@@ -18,7 +19,11 @@
 	  function store() {
 	  	console.log("here");
 	  	txt = $('#msg').val();
-	  	localStorage[new Date().getTime()] = txt;
+	  	day = new Date();
+	  	console.log(day.toUTCString());
+	  	val = day.toUTCString() + ' - ' + txt;
+	  	// txt.after(day.toUTCString);
+	  	localStorage[new Date().getTime()] = val;
 	  	$('#msg').val('');
 	  	reload();
 	  }
