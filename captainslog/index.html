@@ -4,9 +4,14 @@
 
 <head>
 	<title>Captain's Log</title>
+	<meta charset="utf-8" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script>
 	  // Your work will be done here...
+	  $( document ).ready(function() {
+ 			reload();
+	  });
+
 	  function reload() {
 	  	output = "";
 	  	for (key in localStorage){
@@ -17,15 +22,15 @@
 	  }
 
 	  function store() {
-	  	console.log("here");
-	  	txt = $('#msg').val();
-	  	day = new Date();
-	  	console.log(day.toUTCString());
-	  	val = day.toUTCString() + ' - ' + txt;
-	  	// txt.after(day.toUTCString);
-	  	localStorage[new Date().getTime()] = val;
-	  	$('#msg').val('');
-	  	reload();
+		  	txt = $('#msg').val();
+		  	day = new Date();
+		  	console.log(day.toUTCString());
+		  	val = day.toUTCString() + ' - ' + txt;
+		  	// txt.after(day.toUTCString);
+		  	localStorage[new Date().getTime()] = val;
+		  	$('#msg').val('');
+		  	reload();
+	  	
 	  }
 	</script>
 </head>
