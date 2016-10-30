@@ -193,7 +193,7 @@ function haversineDistance(coords1, coords2) {
 function updateWindow(index){
 	station = index;
 	request = new XMLHttpRequest();
-	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json");
+	request.open("get", "https://stark-savannah-16303.herokuapp.com/redline.json");
 	request.onreadystatechange = getRequest;
 	request.send();
 }
