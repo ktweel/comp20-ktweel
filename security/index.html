@@ -20,40 +20,75 @@
 <li><img src="images/img1.png" /></li>
 </ul>
 </li>
+<li>
 <ul>
 <li>The site is also vulnerable to cross site scripting through the score.  Injections here affect both the '/' path and the '/scores.json' path, as the username used for the injection can be used as a query string.</li>
-<li><img src="images/img4.png" /></li>
+<li><img src="images/img11.png" /></li>
+<li>This curl command yielded the following result from the '/' path</li>
+<li><img src="images/img10.png" /></li>
+<li>It also resulted in changes to the 'scores.json?username=hacked' path</li>
+<li><img src="images/img29.png" /></li>
+<li>However, these changes only occur in the /scores.json path when the username associated with the injected code is queried.  For example /scores.json?username=g has no injected code and the page displays as normal</li>
+<li><img src="images/img30.png"></li>
 </ul>
+</li>
+<li>
+<ul>
+<li>Conversely, the third vulnerability to XSS, the grid, doesn't affect the '/' path, only the '/scores.json' path.</li>
+<li><img src="images/img31.png"></li>
+<li>This resulted in the following changes to /scores.json, but no changes in the '/' path, as /scores.json loads the grid data for display and '/' does not.</li>
+<li><img src="images/img8.png" /></li>
+</ul>
+</li>
+<li>
+<ul>
+<li>The following attacks were used to further exploit XSS vulnerabilities</li>
+<li><img src="images/img32.png" /></li>
+<li><img src="images/img27.png" /></li>
+<li><img src="images/img21.png" /></li>
+</ul>
+</li>
+<li>
+<ul>
+<li>They yielded the following results</li>
+<li><img src="images/img9.png" /></li>
+<li><img src="images/img22.png" /></li>
+<li><img src="images/img5.png" /></li>
+<li><img src="images/img12.png" /></li>
+<li><img src="images/img16.png" /></li>
+<li><img src="images/img15.png" /></li>
+<li><img src="images/img17.png" /></li>
+<li><img src="images/img18.png" /></li>
+<li><img src="images/img23.png" /></li>
+<li><img src="images/img24.png" /></li>
+<li><img src="images/img25.png" /></li>
+<li><img src="images/img26.png" /></li>
+</ul>
+</li>
+<li>
+<ul>
+<li>These XSS attacks are possible because input is not sanitized for special characters before being added to the database, as shown below</li>
+<li><img src="images/img28.png" /></li>
+
+</ul>
+</li>
+<li>
+<ul>
+<li>The page is also vulnerable to CORS attacks, due to the use of '*' in the allowed origins.  However, CORS does not appear to be completely correctly enabled, as attempting to access the /submit.json path from a locally hosted client yields a CORS denial</li>
+<li><img src="images/img20.png" /></li>
+<li><img src="images/img7.png" /></li>
+
+</ul>
+</li>
+<li>
+<ul>
+<li>A security benefit of the page is that the mongo uri is stored in an environment variable, and thus the mongodb username and password are not hard coded into the application</li>
+<li><img src="images/img19.png" /></li>
+
+</ul>
+</li>
 </ul>
 
-
-
-
-
-<img src="images/img5.png" />
-<img src="images/img6.png" />
-<img src="images/img7.png" />
-<img src="images/img8.png" />
-<img src="images/img9.png" />
-<img src="images/img10.png" />
-<img src="images/img11.png" />
-<img src="images/img12.png" />
-<img src="images/img13.png" />
-<img src="images/img14.png" />
-<img src="images/img15.png" />
-<img src="images/img16.png" />
-<img src="images/img17.png" />
-<img src="images/img18.png" />
-<img src="images/img19.png" />
-<img src="images/img20.png" />
-<img src="images/img21.png" />
-<img src="images/img22.png" />
-<img src="images/img23.png" />
-<img src="images/img24.png" />
-<img src="images/img25.png" />
-<img src="images/img26.png" />
-<img src="images/img27.png" />
-<img src="images/img27.png" />
 	
 </body>
 </html>
