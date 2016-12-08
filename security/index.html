@@ -7,88 +7,117 @@
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
+<h1>Security Assessment</h1>
+<h2>Introduction</h2>
+<p>This page provides an assessment of the security of <a href='https://calm-peak-87985.herokuapp.com'> calm-peak-87985.herokuapp.com</a>, a web app that manages scores from a 2048 game using a mongo database.  This assessment worked to find security vulnerabilities in the application and documents such errors and demonstrates the results of exploiting such vulnerabilites. </p>
 
-<p> The page is vulnerable to cross-site scripting in 3 locations </p>
+<h2>Methodology</h2>
+
+<p>Methodology for this assessment began with black-box testing, to find security threats without examining the source code, using tools such as curl and Burp Suite.  Then, I examined the source code to see what other vulnerabilities existed and worked to test those vulnerabilities as well.</p>
+
+<h2>Abstract of Findings</h2>
+
+<p>Overall, the biggest vulnerability comes from the possibility of corrupt user input.  Since there are no checks on user input, and special characters that might be part of a javascript injection are not removed before input is added to the database.  Thus when the page attempts to display data from the database, injected scripts are run, adding many errors to page display, such as distorted background images, changes to the way data is displayed or other issues.  There are also vulnerablities via cross origin resource sharing, as users from any origin can access the page. </p>
+
+<h2>Issues Found</h2>
+<p> The page is vulnerable to cross-site scripting in 3 locations.  this is a fairly severe vulnerability. </p>
 <ul>
-<li>
+<li>Through the username, in this case code was injected using curl, but this could be done via a proxy from the client side code as well
 <ul>
-<li>Through the username, in this case code was injected using curl, but this could be done via a proxy from the client side code as well</li>
+
 <li>
-	<img src="images/img2.png" />
+	<img src="images/img2.png" alt="sample curl command for database injection via XSS" />
 </li>
 <li>This curl command yielded the following result from the '/' path</li>
-<li><img src="images/img1.png" /></li>
+<li><img src="images/img1.png" alt="" /></li>
 </ul>
 </li>
-<li>
+<li>The site is also vulnerable to cross site scripting through the score.  Injections here affect both the '/' path and the '/scores.json' path, as the username used for the injection can be used as a query string.
 <ul>
-<li>The site is also vulnerable to cross site scripting through the score.  Injections here affect both the '/' path and the '/scores.json' path, as the username used for the injection can be used as a query string.</li>
-<li><img src="images/img11.png" /></li>
+<li><img src="images/img11.png" alt="sample curl command for database injection via XSS" /></li>
 <li>This curl command yielded the following result from the '/' path</li>
-<li><img src="images/img10.png" /></li>
+<li><img src="images/img10.png" alt="" /></li>
 <li>It also resulted in changes to the 'scores.json?username=hacked' path</li>
-<li><img src="images/img29.png" /></li>
+<li><img src="images/img29.png" alt="" /></li>
 <li>However, these changes only occur in the /scores.json path when the username associated with the injected code is queried.  For example /scores.json?username=g has no injected code and the page displays as normal</li>
-<li><img src="images/img30.png"></li>
+<li><img src="images/img30.png" alt="" /></li>
 </ul>
 </li>
-<li>
+<li>Conversely, the third vulnerability to XSS, the grid, doesn't affect the '/' path, only the '/scores.json' path.
 <ul>
-<li>Conversely, the third vulnerability to XSS, the grid, doesn't affect the '/' path, only the '/scores.json' path.</li>
-<li><img src="images/img31.png"></li>
+<li><img src="images/img31.png" alt="sample curl command" for database injection via XSS /></li>
 <li>This resulted in the following changes to /scores.json, but no changes in the '/' path, as /scores.json loads the grid data for display and '/' does not.</li>
-<li><img src="images/img8.png" /></li>
+<li><img src="images/img8.png" alt="" /></li>
 </ul>
 </li>
-<li>
+<li>The following attacks were used to further exploit XSS vulnerabilities
 <ul>
-<li>The following attacks were used to further exploit XSS vulnerabilities</li>
-<li><img src="images/img32.png" /></li>
-<li><img src="images/img27.png" /></li>
-<li><img src="images/img21.png" /></li>
+<li><img src="images/img32.png" alt="sample curl command for database injection via XSS" /></li>
+<li><img src="images/img27.png" alt="sample curl command for database injection via XSS" /></li>
+<li><img src="images/img21.png" alt="sample curl command for database injection via XSS" /></li>
 </ul>
 </li>
-<li>
+<li>They yielded the following results
 <ul>
-<li>They yielded the following results</li>
-<li><img src="images/img9.png" /></li>
-<li><img src="images/img22.png" /></li>
-<li><img src="images/img5.png" /></li>
-<li><img src="images/img12.png" /></li>
-<li><img src="images/img16.png" /></li>
-<li><img src="images/img15.png" /></li>
-<li><img src="images/img17.png" /></li>
-<li><img src="images/img18.png" /></li>
-<li><img src="images/img23.png" /></li>
-<li><img src="images/img24.png" /></li>
-<li><img src="images/img25.png" /></li>
-<li><img src="images/img26.png" /></li>
+<li>As a result of the rotate:
+<ul>
+<li><img class="small" src="images/img9.png" alt="" /></li>
+<li><img class="small" src="images/img5.png" alt="" /></li>
 </ul>
 </li>
-<li>
+<li>As a result of the image insertion.
 <ul>
-<li>These XSS attacks are possible because input is not sanitized for special characters before being added to the database, as shown below</li>
-<li><img src="images/img28.png" /></li>
+<li><img class="small" src="images/img12.png" alt="" /></li>
+<li><img class="small" src="images/img16.png" alt="" /></li>
+<li><img class="small" src="images/img15.png" alt="" /></li>
+<li><img class="small" src="images/img17.png" alt="" /></li>
+<li><img class="small" src="images/img18.png" alt="" /></li>
+</ul>
+
+</li>
+<li>As a result of the prompt, which keeps the user guessing phrases in a loop until they enter the correct phrase: 'loser'
+<ul>
+<li><img class="small" src="images/img22.png" alt="" /></li>
+<li><img class="small" src="images/img23.png" alt="" /></li>
+<li><img class="small" src="images/img24.png" alt="" /></li>
+<li><img class="small" src="images/img25.png" alt="" /></li>
+<li><img class="small" src="images/img26.png" alt="" /></li>
+</ul>
+</li>
+
+
 
 </ul>
 </li>
-<li>
+<li>These XSS attacks are possible because input is not sanitized for special characters before being added to the database, as shown below.
 <ul>
-<li>The page is also vulnerable to CORS attacks, due to the use of '*' in the allowed origins.  However, CORS does not appear to be completely correctly enabled, as attempting to access the /submit.json path from a locally hosted client yields a CORS denial</li>
-<li><img src="images/img20.png" /></li>
-<li><img src="images/img7.png" /></li>
-
-</ul>
-</li>
-<li>
-<ul>
-<li>A security benefit of the page is that the mongo uri is stored in an environment variable, and thus the mongodb username and password are not hard coded into the application</li>
-<li><img src="images/img19.png" /></li>
+<li><img class="small" src="images/img28.png" alt="" /></li>
 
 </ul>
 </li>
 </ul>
 
+
+<p>The following findings were also made</p>
+<ul>
+<li>The page is also vulnerable to CORS attacks, due to the use of '*' in the allowed origins.  However, CORS does not appear to be completely correctly enabled, as attempting to access the /submit.json path from a locally hosted client yields a CORS denial.  This is a medium-severity vulnerability.
+<ul>
+<li><img src="images/img20.png" alt="" /></li>
+<li><img src="images/img7.png" alt="" /></li>
+
+</ul>
+</li>
+<li>A security benefit of the page is that the mongo uri is stored in an environment variable, and thus the mongodb username and password are not hard coded into the application.  This vulnerability would allow anyone to log into the mongo database and potentially remove all the data.
+<ul>
+<li><img src="images/img19.png" alt="" /></li>
+
+</ul>
+</li>
+</ul>
+
+<h2>Conclusion</h2>
+
+<p>Overall, the largest vulnerability of this web application is cross-site scripting.  This could be addressed by removing special characters from the input.  However, this gets more difficult with the grid, since special characters are needed for the JSON formatting, but a user could insert a script by using a proxy to intercept the POST request.  The product did well for its security by storing the mongodb uri in an environment variable, so the username and password are not hard coded into the application.</p>
 	
 </body>
 </html>

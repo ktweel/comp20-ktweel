@@ -1,3 +1,20 @@
 img {
-	width: 70%;
+	width: 60%;
+}
+
+.small {
+	width: 50%;
+}
+
+li {
+	padding:10px;
+	list-style-position: inside;
+}
+
+ul {
+    list-style-position: inside;
+}
+
+h1{
+	text-align: center;
 }
