@@ -17,3 +17,5 @@ I've definitely gotten a lot better at looking things up, and taking charge of m
 The most important thing I've learned in this course is the importance of thinking about security when building web applications.  Learning about how web pages can specifically be hacked was eye-opening.  Realizing that not removing special characters from input or that enabling CORS lead to vulnerabilities I hadn't previously thought of was helpful for me.
 
 ##Topic I'd like to delve deeper into
+
+I'd like to delve deeper into databases and learn more about SQL
